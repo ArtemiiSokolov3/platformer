@@ -16,12 +16,12 @@ public:
 
     void playerright_draw()
     {
-        txTransparentBlt(TxDC(), x, y, sizeX, sizeY, right);
+        txTransparentBlt(txDC(), x, y, sizeX, sizeY, right);
     }
 
     void playerleft_draw()
     {
-        txTransparentBlt(TxDC(), x, y, sizeX, sizeY, left);
+        txTransparentBlt(txDC(), x, y, sizeX, sizeY, left);
     }
 
 
@@ -36,7 +36,7 @@ public:
 
     void platform_draw(int x, int y)
     {
-        txTransparentBlt(TxDC(), x, y, sizeX, sizeY, platform);
+        txTransparentBlt(txDC(), x, y, sizeX, sixeY, left);
     }
 };
 int main()
