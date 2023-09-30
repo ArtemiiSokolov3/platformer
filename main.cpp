@@ -35,17 +35,17 @@ public:
     {
         if (txGetAsyncKeyState(VK_RIGHT))
         {
-            x = x + 5;
+            x = x + 0.01;
             turn = 1;
         }
         if (txGetAsyncKeyState(VK_LEFT))
         {
-            x = x - 5;
+            x = x - 0.01;
             turn = 0;
         }
         if (y < 562)
         {
-            y = y + 2;
+            y = y + 0.01;
         }
         if (y > 562)
         {
