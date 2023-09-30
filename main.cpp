@@ -11,27 +11,24 @@ public:
     int speed = 10;
     int x = 41;
     int y = 38;
-    HDC right = txLoadImage("playerright.png");
-    HDC left = txLoadImage("playerleft.png");
-
-    Player(int sizeX1, int sizeY1, int x1, int y1, string fileL, string fileR)
+    int turn = -1;
+    Player(int sizeX1, int sizeY1, int x1, int y1)
     {
         sizeX=sizeX1;
         sizeY=sizeY1;
         x=x1;
         y=y1;
-        right = txLoadImage(fileR);
-        left = txLoadImage(fileL);
+
     } 
     void player_draw()
     {
-        if (txGetAsyncKeyState(VK_RIGHT))
+        if (turn == 1)
         {
-            txTransparentBlt(txDC(), x, y, sizeX, sizeY, right);
+            txTransparentBlt(txDC(), x, y, sizeX, sizeY, "playerright.bmp");
         }
-        if (txGetAsyncKeyState(VK_LEFT))
+        if (turn == 0)
         {
-            txTransparentBlt(txDC(), x, y, sizeX, sizeY, left);
+            txTransparentBlt(txDC(), x, y, sizeX, sizeY, "playerleft.bmp");
         }
     }
     void player_control()
@@ -39,11 +36,35 @@ public:
         if (txGetAsyncKeyState(VK_RIGHT))
         {
             x = x + 5;
+            turn = 1;
         }
         if (txGetAsyncKeyState(VK_LEFT))
         {
             x = x - 5;
+            turn = 0;
         }
+        if (y < 562)
+        {
+            y = y + 2;
+        }
+        if (y > 562)
+        {
+            y = 562;
+        }
+        if (txGetAsyncKeyState(VK_UP))
+        {
+            if (y == 562)
+            {
+                for (int i; i >= 10; i++)
+                {
+                    y = y - 4;
+                }
+            }
+        }
+    }
+    void updatescreen()
+    {
+        txClear();
     }
 
 };
@@ -53,46 +74,27 @@ class Platform
 public:
     int sizeX = 200;
     int sizeY = 75;
-    HDC left = txLoadImage("platform.png");
-    Platform(int sizeX1, int sizeY1, string fileK)
+    Platform(int sizeX1, int sizeY1)
     {
         sizeX=sizeX1;
         sizeY=sizeY1;
-        left = txLoadImage(fileK);
     }
     void platform_draw(int x, int y)
     {
-        txTransparentBlt(txDC(), x, y, sizeX, sizeY, left);
+        txTransparentBlt(txDC(), x, y, sizeX, sizeY, "platform.bmp");
     }
 };
 
 int main()
 {
-    Platform platform(200, 75, "platform.png");
-    Player player(74,81,38,42,"playerleft.png","playerright.png");
+    Platform platform(200, 75);
+    Player player(74,81,38,42);
     txCreateWindow(800, 600);
     while (1)
     {
         player.player_control();
         player.player_draw();
-        if (player.y > 38)
-        {
-            player.y = player.y - 2;
-        }
-        if (player.y < 38)
-        {
-            player.y = 38;
-        }
-        if (txGetAsyncKeyState(VK_UP))
-        {
-            if (player.y == 38)
-            {
-                for (int i; i >= 10; i++)
-                {
-                    player.y = player.y + 4;
-                }
-            }
-        }
+        player.updatescreen();
     }
 
 
