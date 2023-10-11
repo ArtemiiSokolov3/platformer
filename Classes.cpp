@@ -3,7 +3,7 @@
 using namespace std;
 class Player
 {
-public:
+    public:
     int sizeX = 74;
     int sizeY = 81;
     int jump = 50;
@@ -13,7 +13,6 @@ public:
     int arrow = 1;
     HDC right = txLoadImage("playerright.bmp");
     HDC left = txLoadImage("playerleft.bmp");
-
     Player(int sizeX1, int sizeY1, int x1, int y1)
     {
         sizeX=sizeX1;
@@ -30,20 +29,22 @@ public:
         right = txLoadImage(fileR.c_str());
         left = txLoadImage(fileL.c_str());
     }
-    int playerright_draw()
+    int playerDraw()
     {
-        txTransparentBlt(txDC(), x, y, sizeX, sizeY, right, 0, 0, TX_WHITE);
-    }
-
-    int playerleft_draw()
-    {
-        txTransparentBlt(txDC(), x, y, sizeX, sizeY, left, 0, 0,TX_WHITE);
+        if (arrow==0)
+        {
+            txTransparentBlt(txDC(), x, y, sizeX, sizeY, right, 0, 0, TX_WHITE);
+        }
+        else
+        {
+            txTransparentBlt(txDC(), x, y, sizeX, sizeY, left, 0, 0, TX_WHITE);
+        }
     }
     int Move()
     {
         if (txGetAsyncKeyState(VK_LEFT))
         {
-            if (x>0) {x=x-5; arrow=1;}
+            if (x>0) {x=x-5; arrow=1; }
         }
         if (txGetAsyncKeyState(VK_RIGHT))
         {
@@ -55,42 +56,43 @@ public:
         }
     }
 };
-class Platform
-{
-public:
-    int sizeX = 200;
-    int sizeY = 75;
-    int x = 120;
-    int y = 160;
-    HDC left = txLoadImage("platform.bmp");
-    Platform(int sizeX1, int sizeY1)
+    class Platform
     {
-        sizeX=sizeX1;
-        sizeY=sizeY1;
-    }
-    Platform(int sizeX1, int sizeY1, string fileK)
-    {
-        sizeX=sizeX1;
-        sizeY=sizeY1;
-        left = txLoadImage(fileK.c_str());
-    }
-    int platform_draw()
-    {
-        txTransparentBlt(txDC(), x, y, sizeX, sizeY, left);
-    }
-};
+    public:
+        int sizeX = 200;
+        int sizeY = 75;
+        int x = 40;
+        int y = 100;
+        HDC left = txLoadImage("platform.bmp");
+        Platform(int sizeX1, int sizeY1)
+        {
+            sizeX=sizeX1;
+            sizeY=sizeY1;
+        }
+        Platform(int sizeX1, int sizeY1, string fileK)
+        {
+            sizeX=sizeX1;
+            sizeY=sizeY1;
+            left = txLoadImage(fileK.c_str());
+        }
+        int platform_draw()
+        {
+            txTransparentBlt(txDC(), x, y, sizeX, sizeY, left,0,0, TX_WHITE);
 
-int main()
-{
-    txCreateWindow(800, 600);
-    Platform b(200, 75);
-    Player a(74, 81, 41, 38);
-    while(1)
+        }
+    };
+
+    int main()
     {
-        a.Move();
-        a.playerright_draw();
-        b.platform_draw();
-        txSleep(100);
-        txClear();
+        txCreateWindow(800, 600);
+        Platform b(200, 75);
+        Player a(74, 81, 41, 38);
+        while(1)
+        {
+            a.playerDraw();
+            a.Move();
+            b.platform_draw();
+            txSleep(100);
+            txClear();
+        }
     }
-}
