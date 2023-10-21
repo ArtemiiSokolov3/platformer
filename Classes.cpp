@@ -1,9 +1,13 @@
+#include <cmath>
 #include <iostream>
 #include "TXLib.h"
 using namespace std;
 class Player
 {
     public:
+    int jampOn = 0;
+    int Hjamp = 250;
+    int gampStep = 0;
     float dy = 0;
     int sizeX = 74;
     int sizeY = 81;
@@ -15,6 +19,26 @@ class Player
     int groundLevel = 500;
     HDC right = txLoadImage("playerright.bmp");
     HDC left = txLoadImage("playerleft.bmp");
+    int Jamp()
+    {
+        gampStep = gampStep + Hjamp/8;
+        if(Hjamp - gampStep > 0)
+        {
+            y = y -  Hjamp/8;
+
+        }
+        else
+        {
+            y = y +  Hjamp/8;
+
+        }
+        if (gampStep > Hjamp*2)
+        {
+            gampStep = 0;
+            jampOn = 0;
+        }
+        x = x + sqrt(Hjamp);
+    }
     Player(int sizeX1, int sizeY1, int x1, int y1)
     {
         sizeX = sizeX1;
@@ -54,7 +78,10 @@ class Player
         }
         if (txGetAsyncKeyState(VK_UP))
         {
-            if (y<300) y=y-speed-20;
+            if(jampOn == 0)
+            {
+                jampOn = 1;
+            }
         }
     }
     int Falling_Player(int level)
@@ -78,50 +105,68 @@ class Platform
     public:
     int sizeX = 200;
     int sizeY = 75;
-    int x = 40;
-    int y = 200;
+    int x,y;
     HDC left = txLoadImage("platform.bmp");
-    Platform(int sizeX1, int sizeY1)
+    Platform(int sizeX1, int sizeY1, int x1, int y1)
     {
         sizeX=sizeX1;
         sizeY=sizeY1;
+        x = x1;
+        y = y1;
     }
-    Platform(int sizeX1, int sizeY1, string fileK)
+    Platform(int sizeX1, int sizeY1,int x1, int y1, string fileK)
     {
         sizeX=sizeX1;
         sizeY=sizeY1;
+        x = x1;
+        y = y1;
         left = txLoadImage(fileK.c_str());
     }
     int platform_draw()
     {
         txTransparentBlt(txDC(), x, y, sizeX, sizeY, left,0,0, TX_WHITE);
     }
+    int moveUPDOWN(int speed1)
+    {
+        y = y + speed1;
+        if(y >= 599)
+        {
+            y = 20;
+        }
+    }
+    int moveLEFTRIGHT(int speed2)
+    {
+        x = x + speed2;
+        if(x >= 759)
+        {
+            x = 0;
+        }
+    }
 };
 
 int main()
 {
     txCreateWindow(800, 600);
-    Platform platform(200, 75);
+    Platform platform(200, 75,40,200);
     Player player(74, 81, 41, 38);
+    Platform plat1(200,75,200,350);
     while(1)
     {
         player.playerDraw();
         player.Move();
+        if(player.jampOn) player.Jamp();
         platform.platform_draw();
-        /*
-        if (1)
-        {
-            player.fallY = platform.y - platform.sizeY;
-            player.fallX = platform.x + platform.sizeX;
-        }
-        */
+        plat1.platform_draw();
+        plat1.moveLEFTRIGHT(5);
+        platform.platform_draw();
+        platform.moveLEFTRIGHT(5);
         if (player.OnPl(platform.y, platform.x, platform.sizeX))
         {
-            player.Falling_Player(platform.y - platform.sizeY);
+           if(!player.jampOn) player.Falling_Player(platform.y - platform.sizeY);
         }
         else
         {
-            player.Falling_Player(player.groundLevel);
+          if(!player.jampOn)  player.Falling_Player(player.groundLevel);
         }
         txSleep(100);
         txClear();
