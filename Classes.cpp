@@ -5,6 +5,9 @@ using namespace std;
 class Player
 {
     public:
+    int x1 = 0;
+    int dead = 0;
+    string dead1 = "";
     int jampOn = 0;
     int Hjamp = 250;
     int gampStep = 0;
@@ -19,25 +22,53 @@ class Player
     int groundLevel = 500;
     HDC right = txLoadImage("playerright.bmp");
     HDC left = txLoadImage("playerleft.bmp");
+    string toString(int a)
+    {
+        string s = "";
+        while( a > 0)
+        {
+            if (a % 10 == 0) s = "0" + s;
+            if (a % 10 == 1) s = "1" + s;
+            if (a % 10 == 2) s = "2" + s;
+            if (a % 10 == 3) s = "3" + s;
+            if (a % 10 == 4) s = "4" + s;
+            if (a % 10 == 5) s = "5" + s;
+            if (a % 10 == 6) s = "6" + s;
+            if (a % 10 == 7) s = "7" + s;
+            if (a % 10 == 8) s = "8" + s;
+            if (a % 10 == 9) s = "9" + s;
+            a = a / 10;
+        }
+        return s;
+    }
     int Jamp()
     {
-        gampStep = gampStep + Hjamp/8;
-        if(Hjamp - gampStep > 0)
+        if (arrow==0)
         {
-            y = y -  Hjamp/8;
-
+            if (x1/3<3)
+            {
+                y=y-(20-x1/3);
+            }
+            else
+            {
+                y=y+(x1+1)/3-20;
+            }
+            x1=x1+5;
+            x=x+5;
         }
         else
         {
-            y = y +  Hjamp/8;
-
+            if (x1/3<3)
+            {
+                y=y-(20-x1/3);
+            }
+            else
+            {
+                y=y+(x1+1)/3-20;
+            }
+            x1=x1+5;
+            x=x-5;
         }
-        if (gampStep > Hjamp*2)
-        {
-            gampStep = 0;
-            jampOn = 0;
-        }
-        x = x + sqrt(Hjamp);
     }
     Player(int sizeX1, int sizeY1, int x1, int y1)
     {
@@ -86,7 +117,6 @@ class Player
     }
     int Falling_Player(int level)
     {
-
         if (y < level)
         {
             dy += 0.5;
@@ -143,10 +173,10 @@ class Platform
         }
     }
 };
-
 int main()
 {
     txCreateWindow(800, 600);
+    txSetColor(TX_BLACK);
     Platform platform(200, 75,40,200);
     Player player(74, 81, 41, 38);
     Platform plat1(200,75,200,350);
@@ -162,12 +192,24 @@ int main()
         platform.moveLEFTRIGHT(5);
         if (player.OnPl(platform.y, platform.x, platform.sizeX))
         {
-           if(!player.jampOn) player.Falling_Player(platform.y - platform.sizeY);
+            if(!player.jampOn)
+            {
+                player.Falling_Player(platform.y - platform.sizeY);
+                player.dy = 0;
+            }
         }
         else
         {
-          if(!player.jampOn)  player.Falling_Player(player.groundLevel);
+            if(!player.jampOn)  player.Falling_Player(player.groundLevel);
         }
+        if (player.y >= player.groundLevel)
+        {
+            player.y = 38;
+            player.x = 41;
+            player.dead = player.dead + 1;
+        }
+        player.dead1 = player.toString(player.dead);
+        txTextOut (10, 10, player.dead1.c_str());
         txSleep(100);
         txClear();
     }
