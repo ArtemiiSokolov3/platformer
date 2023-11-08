@@ -41,6 +41,24 @@ class Platform
         }
     }
 };
+int menu_deco()
+{
+
+    txSetFillColor(TX_RED);
+    txCircle(40,40,20);
+    txCircle(600,500,35);
+    txSetFillColor(TX_GREEN);
+    txCircle(170,200,80);
+    txCircle(700,350,50);
+    txSetFillColor(TX_YELLOW);
+    txCircle(95,400,60);
+    txCircle(630,150,100);
+    txSetFillColor(TX_BLUE);
+    txCircle(225,525,30);
+    txCircle(740,550,10);
+    txSetFillColor(TX_BLACK);
+    txDrawText(20,550,160,600,"V. 1.0.0");
+
 int main()
 {
     int deco = 1;
