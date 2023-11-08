@@ -20,6 +20,7 @@ class Player
     int y = 38;
     int arrow = 1;
     int groundLevel = 500;
+    int level=500;
     HDC right = txLoadImage("playerright.bmp");
     HDC left = txLoadImage("playerleft.bmp");
     string toString(int a)
@@ -43,6 +44,9 @@ class Player
     }
     int Jamp()
     {
+
+       if  (jampOn)
+       {
         if (arrow==0)
         {
             if (x1/3<3)
@@ -51,7 +55,14 @@ class Player
             }
             else
             {
-                y=y+(x1+1)/3-20;
+                if(OnPl(y, x, sizeX) == 0)
+                {
+                    y=y+(x1+1)/3-20;
+                }
+
+
+
+
             }
             x1=x1+5;
             x=x+5;
@@ -64,10 +75,19 @@ class Player
             }
             else
             {
-                y=y+(x1+1)/3-20;
+                if(OnPl(y, x, sizeX) == 0)
+                {
+                    y=y+(x1+1)/3-20;
+                }
             }
             x1=x1+5;
             x=x-5;
+        }
+        }
+        if (y>=level)
+        {
+          x1 = 0;
+          jampOn = 0;
         }
     }
     Player(int sizeX1, int sizeY1, int x1, int y1)
@@ -115,17 +135,17 @@ class Player
             }
         }
     }
-    int Falling_Player(int level)
+    int Falling_Player()
     {
         if (y < level)
         {
-            dy += 0.5;
+            if (dy<=5) dy += 0.5;
             y += dy;
         }
     }
     int OnPl (int pltformY, int platformX, int platformSizeX)
     {
-        if (y < pltformY && x < platformX + platformSizeX && x > platformX)
+        if (y < pltformY + 75 && x < platformX + platformSizeX && x > platformX  )
         return 1;
         return 0;
     }
@@ -194,13 +214,19 @@ int main()
         {
             if(!player.jampOn)
             {
-                player.Falling_Player(platform.y - platform.sizeY);
+                player.level=platform.y - platform.sizeY;
+                player.Falling_Player();
                 player.dy = 0;
             }
         }
         else
         {
-            if(!player.jampOn)  player.Falling_Player(player.groundLevel);
+            if(!player.jampOn)
+            {
+                player.level=player.groundLevel;
+                player.Falling_Player();
+
+            }
         }
         if (player.y >= player.groundLevel)
         {
