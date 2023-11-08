@@ -224,11 +224,20 @@ int main()
     int mode = 0;
     while(1)
     {
+        while(mode == 1)
+        {
         player.playerDraw();
         player.Move();
+
         if(player.jampOn) player.Jamp();
         platform.platform_draw();
         plat1.platform_draw();
+        txRectangle(10,10,50,50);
+        txDrawText(10,10,50,50,"||");
+        if(txMouseX()>=10 && txMouseX()<=50 && txMouseY()>=10 && txMouseY()<=50 && txMouseButtons() == 1)
+        {
+            mode = 0;
+        }
         plat1.moveLEFTRIGHT(5);
         platform.platform_draw();
         platform.moveLEFTRIGHT(5);
@@ -260,6 +269,7 @@ int main()
         txTextOut (10, 100, player.dead1.c_str());
         txSleep(100);
         txClear();
+        }
          //0 - menu; 1 - game; 2 - settings; 3 - creators
         while(mode == 0)
         {
