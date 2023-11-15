@@ -224,6 +224,7 @@ int main()
     Platform platform(200, 75,40,200);
     Player player(74, 81, 41, 38);
     Platform plat1(200,75,200,350);
+    Platform plat2(200,75,450,400);
     int mode = 0;
     while(1)
     {
@@ -235,6 +236,7 @@ int main()
         if(player.jampOn) player.Jamp();
         platform.platform_draw();
         plat1.platform_draw();
+        plat2.platform_draw();
         txRectangle(10,10,50,50);
         txDrawText(10,10,50,50,"||");
         if(txMouseX()>=10 && txMouseX()<=50 && txMouseY()>=10 && txMouseY()<=50 && txMouseButtons() == 1)
@@ -244,6 +246,7 @@ int main()
         plat1.moveLEFTRIGHT(5);
         platform.platform_draw();
         platform.moveLEFTRIGHT(5);
+        plat2.moveLEFTRIGHT(5);
         if (player.OnPl(platform.y, platform.x, platform.sizeX))
         {
             if(!player.jampOn)
@@ -294,7 +297,7 @@ int main()
                 menu_deco();
             }
             txSetColor(TX_RED);
-            txDrawText(50,50,750,200,"ewg9ugfwwu9");
+            txDrawText(50,50,750,200,"Jumptrail: Little adventure");
             txSetFillColor(TX_WHITE);
             txRectangle(300,200,500,300);
             txDrawText(300,200,500,300,"Играть");
@@ -376,3 +379,4 @@ int main()
         }
     }
 }
+
