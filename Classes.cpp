@@ -267,6 +267,16 @@ int main()
             }
             player.level=plat1.y - plat1.sizeY;
         }
+        else if (player.OnPl(plat2.y, plat2.x, plat2.sizeX))
+        {
+            if(!player.jampOn)
+            {
+                //player.level=platform.y - platform.sizeY;
+                player.Falling_Player();
+                player.dy = 0;
+            }
+            player.level=plat2.y - plat2.sizeY;
+        }
         else
         {
             if(!player.jampOn)
@@ -379,4 +389,3 @@ int main()
         }
     }
 }
-
