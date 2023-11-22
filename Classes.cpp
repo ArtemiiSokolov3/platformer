@@ -141,7 +141,7 @@ class Player
     {
         if (y < level)
         {
-            if (dy<=5) dy += 0.5;
+            if (dy<=10) dy += 0.5;
             y += dy;
         }
     }
@@ -216,6 +216,8 @@ int menu_deco()
 int main()
 {
     HDC fon = txLoadImage("dungeon.bmp");
+    HDC GAMEOVER = txLoadImage("GAMEOVER.bmp");
+    int healf = 3;
     int deco = 1;
     int ifer = 0;
     setlocale(LC_ALL,"Russian");
@@ -291,10 +293,20 @@ int main()
             player.y = 38;
             player.x = 41;
             player.dead = player.dead + 1;
+            healf  = healf - 1;
         }
-        player.dead1 = player.toString(player.dead);
-        txTextOut (10, 100, player.dead1.c_str());
+        player.dead1 = player.toString(healf);
+        txSelectFont ("Comic Sans MS", 50);
+        txTextOut(100, 10, player.dead1.c_str());
+        txSelectFont ("Comic Sans MS", 30);
         txSleep(100);
+        if (healf == 0)
+        {
+            txTransparentBlt(txDC(), 0, 0, 800, 600, GAMEOVER, 0, 0, TX_WHITE);
+            txSleep(5000);
+            mode = 0;
+            healf = 3;
+        }
         txClear();
         }
          //0 - menu; 1 - game; 2 - settings; 3 - creators
